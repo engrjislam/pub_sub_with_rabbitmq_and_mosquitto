@@ -40,7 +40,7 @@ Change value of 'QUEUE' to 'mqtt-subscription-sensors-dhtqos0' (otherwise, it is
 python broker/consumer.py
 ```
 #### By subscriber
-Following approach will not grab data from a queue that were used to store data. So earlier data will be lost.
+Following approach will not grab data from a queue that were used to store data. So earlier data will be discarded (but they will be in the queue).
 ```
 python sub/src/subscribe.py
 ```
