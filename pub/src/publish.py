@@ -90,7 +90,7 @@ if __name__ == '__main__':
     try:
         # Create an MQTT client and attach our routines to it.
         #client              = mqtt.Client(BROKER_ID)
-        client              = mqtt.Client("sensors-dht")
+        client              = mqtt.Client()
         
         # built-in callbacks
         client.on_log       = on_log
