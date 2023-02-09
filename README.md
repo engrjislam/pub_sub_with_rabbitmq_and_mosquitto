@@ -27,6 +27,7 @@ python broker/producer.py
 ```
 
 #### By publisher
+It is required to run eighter of producer/consumer at least once to bind topic/routing_key with the exchange brfore running follwing command.
 ```
 python pub/src/publish.py
 ```
@@ -35,7 +36,6 @@ python pub/src/publish.py
 Data can be consumed either by broker/consumer.py or pub/src/subscribe.py.
 
 #### By consumer
-Change value of 'QUEUE' to 'mqtt-subscription-sensors-dhtqos0' (otherwise, it is required to run eighter of producer/consumer to run topic/routing_key with the exchange) and run
 ```
 python broker/consumer.py
 ```
