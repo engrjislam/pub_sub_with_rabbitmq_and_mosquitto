@@ -1,0 +1,17 @@
+# base image
+#FROM python:3.8-alpine
+#FROM balenalib/raspberrypi3-python:3-buster
+#FROM arm32v7/python:3.8-buster
+FROM python:3.10.6
+
+# copy all contents from present working directory
+COPY . /mqtt_influxdb_grafana
+
+# set the working directory
+WORKDIR /mqtt_influxdb_grafana
+
+# install dependencies mentioned in requirements_pub.txt
+RUN pip3 install -r requirements_pub.txt
+
+# start container with "python src/puslish.py" command
+CMD python3 src/publish.py

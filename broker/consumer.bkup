@@ -1,0 +1,70 @@
+import pika
+
+
+def main():
+    parameters = pika.ConnectionParameters(host='localhost') #, port=5672)
+    connection = pika.BlockingConnection(parameters)
+    
+    # channel1 -> sensors.dht.humidity
+    # channel2 -> sensors.dht.temperature
+    channel1 = connection.channel()
+    channel2 = connection.channel()
+
+    #channel.exchange_declare(exchange='amq.topic', exchange_type='topic')
+
+    #result = channel.queue_declare(queue='mqtt-subscription-1OrCExIkoclf5-B3ccwqSAqos0', exclusive=True)
+    queue_name = 'mqtt-subscription-yMUZTEjI69SzJb51L1ohRQqos0' #result.method.queue
+
+    channel1.queue_bind(exchange='amq.topic', queue=queue_name, routing_key='sensors.dht.humidity')
+    channel2.queue_bind(exchange='amq.topic', queue=queue_name, routing_key='sensors.dht.temperature')
+
+    print(' [*] Waiting for logs. To exit press CTRL+C')
+
+    def callback1(ch, method, properties, body):
+        print("----------------- start -----------------")
+        #print(" [ch]          %r" % ch)
+        #print(" [method]      %r" % method)
+        print(" [routing_key] %r" % method.routing_key)
+        #print(" [properties]  %r" % properties)
+        print(" [body]        %r" % body)
+        print("----------------- -end- -----------------")
+
+    def callback2(ch, method, properties, body):
+        print("----------------- start -----------------")
+        #print(" [ch]          %r" % ch)
+        #print(" [method]      %r" % method)
+        print(" [routing_key] %r" % method.routing_key)
+        #print(" [properties]  %r" % properties)
+        print(" [body]        %r" % body)
+        print("----------------- -end- -----------------")
+
+    def callback(ch, method, properties, body):
+        print("----------------- start -----------------")
+        #print(" [ch]          %r" % ch)
+        #print(" [method]      %r" % method)
+        print(" [routing_key] %r" % method.routing_key)
+        #print(" [properties]  %r" % properties)
+        print(" [body]        %r" % body)
+        print("----------------- -end- -----------------")
+
+    channel1.basic_consume(
+        queue=queue_name, 
+        on_message_callback= callback1, 
+        auto_ack=True
+        )
+
+    channel2.basic_consume(
+        queue=queue_name, 
+        on_message_callback=callback2,
+        auto_ack=True
+        )
+
+    channel1.start_consuming()
+    channel2.start_consuming()
+
+
+if __name__ == '__main__':
+    try:
+        main()
+    except KeyboardInterrupt as ki:
+        print("Stopping consuption ...")

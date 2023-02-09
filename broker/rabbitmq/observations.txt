@@ -1,0 +1,37 @@
+Paho-based publisher (pub) script is wriiten in pub/src/publish.py 
+and subscriber (sub) script is wriiten in sub/src/subscribe.py.
+
+Pika-based producer script is located at broker/producer.py 
+and consumer script is located at broker/consumer.py.
+
+Both publisher & producer are aimed for generating data from IoT resources
+whereas subscriber & consumer are aimed for further consuming / processing.
+
+
+Both pub-sub scripts work fine with Mosquitto and RabbitMQ brokers.
+
+
+Following facts are introduced:
+-------------------------------
+1) pub script can send to RabbitMQ and sub script can receive only data 
+   from RabbitMQ from the sub activation period. Earlier data will be 
+   discarded. 
+   By default, paho-based pub send data to 'amq.topic' exhange under 
+   'mqtt-subscription-{client_id}qos{0/1}' queue. 
+
+2) RabbitMQ do not store data that sent by pub script 
+   unless pub's topic bounded through a RabbitMQ's queue with an exchange.
+
+3) sub script can not grab earlier from a RabbitMQ queue but consumer can 
+   even through they both work on same topic/routing_key.
+
+4) In paho-pika connection, a consumer's routing_key must be in line with 
+   pub's topic to consume data from pub. Default exchange is 'amq.topic'.
+   However, consumer's exhange, queue & routing must be inline with producer's
+   exhange, queue and routing repectively to consume data from the producer. 
+   Two exchange can have same routing_key on the same host. Both consumer & 
+   producer may work with same routing_key but with different exchanges. 
+
+The connection is the significant point to be noticed. The pub & sub establish 
+MQTT-based connection (MQTT 3.1.1) whereas producer & consumer establish 
+AMQP-based connection (AMQP 0-9-1). 

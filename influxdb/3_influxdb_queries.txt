@@ -1,0 +1,135 @@
+# login to influx
+# ---------------
+# ref: https://docs.influxdata.com/influxdb/v1.8/query_language/
+#      https://docs.influxdata.com/influxdb/v2.6/query-data/influxql/explore-data/
+#      https://www.youtube.com/playlist?list=PLoVvAgF6geYMb029jpxqMuz5dRDtO0ydM
+
+
+
+## ----------------------------- old -----------------------------------
+#                                SKIP
+## ----------------------------- --- -----------------------------------
+# make sure ... influxdb server is running on other tab with 'sudo influxd' 
+# command to run/execute following commands on a new tab.
+
+## ----------------------------- new -----------------------------------
+# With new GPG key -- the command 'sudo influxd' is not requeired! 
+## ----------------------------- --- -----------------------------------
+## ----------------------------- xxx -----------------------------------
+
+
+host=127.0.0.1
+port=8086
+username=influxDBuser
+password=influxDBpass
+
+#influx -host $host -port $port -username $username -password $password
+influx -username $username -password $password
+
+
+# help 
+help
+HELP
+
+
+# show databases
+show databases
+SHOW DATABASES
+
+
+# use treatment
+use dht
+USE dht
+
+
+# show measurement
+show measurements
+SHOW MEASUREMENTS
+
+
+# insert into 'temperature' measurement where 'place' is a tag or an index 
+# with a value  (2 columns).
+# time will be inserted automatically (as an extra field) since influxdb is a time-series database.
+INSERT temperature,place=room1 value=25.5
+INSERT temperature,place=room2 value=35.5
+
+# insert into 'humidity' measurement where 'place' is a tag or an index 
+# with a value  (2 columns). 
+# time will be inserted automatically (as an extra field) since influxdb is a time-series database.
+INSERT humidity,place=room1 value=37.5
+INSERT humidity,place=room2 value=27.5
+
+
+# show measurement
+show measurements
+SHOW MEASUREMENTS
+
+
+# show series
+show series
+SHOW SERIES
+
+
+# show tags
+show tag keys
+SHOW TAG KEYS
+
+
+# show fields
+show field keys
+SHOW FIELD KEYS
+
+
+# select all from humidity
+select * from humidity
+SELECT * FROM humidity
+
+
+# select all from temperature
+select * from temperature
+SELECT * FROM temperature
+
+
+# row count
+select count(*) from temperature
+SELECT COUNT(*) FROM temperature
+
+select count(*) from humidity
+SELECT COUNT(*) FROM humidity
+
+
+# drop series
+show series
+drop series from temperature where place='room1'
+drop series from humidity where place='room2'
+
+
+# drop meseaurement
+show measurements
+drop measurement temperature
+show measurements
+drop measurement humidity
+show measurements
+
+
+# drop -- can be applied also for 
+#      CONTINUOUS, 
+#      DATABASE, 
+#      MEASUREMENT, 
+#      RETENTION, 
+#      SERIES, 
+#      SHARD, 
+#      SUBSCRIPTION, and 
+#      USER
+## ------------------------------------------------
+## Don't execute drop command for database and user 
+## -- as these will be required by the demo app.
+## -- skip following following two commands.
+## ------------------------------------------------ 
+#drop database dht, 
+#drop user influxDBuser.
+
+
+# exit from influx 
+quit
+exit
