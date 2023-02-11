@@ -1,0 +1,87 @@
+# secure influxdb
+# ---------------
+# ref: https://docs.influxdata.com/influxdb/v1.8/administration/config/#http-endpoints-settings
+#      https://docs.influxdata.com/influxdb/v1.8/administration/authentication_and_authorization/#set-up-authentication
+
+
+
+# step 1: Create an admin (look at 1_create_user_db.txt).
+# ref: https://docs.influxdata.com/influxdb/v1.8/administration/authentication_and_authorization/#user-management-commands
+## ----------------------------- old -----------------------------------
+#                                SKIP
+## ----------------------------- --- -----------------------------------
+# make sure ... influxdb server is running on other tab with 'sudo influxd' 
+# command to run/execute following commands on a new tab.
+
+## ----------------------------- new -----------------------------------
+# With new GPG key -- the command 'sudo influxd' is not requeired! 
+## ----------------------------- --- -----------------------------------
+## ----------------------------- xxx -----------------------------------
+
+## ----------------------------- old -----------------------------------
+#                               STEP 1
+## ----------------------------- --- -----------------------------------
+# skip following command -- as you have done (at 1_create_user_db.txt)
+# where we have used 'influxDBuser' and 'influxDBpass' as username and 
+# password respectively!
+## ----------------------------- xxx -----------------------------------
+CREATE USER <username> WITH PASSWORD '<password>' WITH ALL PRIVILEGES
+
+
+# step 2: Enable authentication 
+## ----------------------------- old -----------------------------------
+#                               STEP 2
+## ----------------------------- --- -----------------------------------
+# To stop execution of DB commands like create / delete DATABASE, User 
+# etc. from unauthorized user, we need secure InfluxDB. However, following 
+# command will not will help -- to stop executing DB commands (exclude '>').
+# provide influxDBuser and influxDBpass for username and password respectively.
+
+influx
+> auth
+
+# Rather secure the InfluxDB by setting the 'auth-enabled = true' (in the [http] section) in influxdb.conf file
+# (/etc/influxdb/influxdb.conf at line 263). Simply remove # from line having '#auth-enabled = flase' beggining 
+# and replace false with true.
+# ref: https://docs.influxdata.com/influxdb/v1.8/administration/authentication_and_authorization/#set-up-authentication
+## ----------------------------- xxx -----------------------------------
+
+
+## ----------------------------- new -----------------------------------
+#  skip 'step 3' and 'step 4' (all the way upto next '## --- xxx ---')
+#  -- as these already resolved in new release of influxdb (1.8.10).
+## ----------------------------- --- -----------------------------------
+
+# step 3: influxdb service got stuck as /etc/influxdb/influxdb.conf file edited.
+#         Remove 'Type=forking' from /etc/systemd/system/multi-user.target.wants/influxdb.service and save it.
+# ref: https://github.com/influxdata/influxdb/issues/21967#issuecomment-889695265
+
+# step 4: Reload the systemctl daemon as
+sudo systemctl daemon-reload
+## ----------------------------- xxx -----------------------------------
+
+
+# step 5: Restart InfluxDB.
+sudo systemctl restart influxdb 
+
+
+# step 6: Check the status
+service influxdb status
+
+
+## step 6: Check if unauthorized user can execute InfluxDB commands
+#  From now and onward, unauthorized user could not execute InfluxDB
+#  commands. For example (try to execute following commands):
+#  ---------------------------------------------------------------------
+
+influx
+> show databases
+
+# Error:
+# ------
+ERR: unable to parse authentication credentials
+Warning: It is possible this error is due to not setting a database.
+Please set a database with the command "use <database>".
+
+# Error will be shown with a valid username and password.
+# Instructions can be found in '3_influxdb_queries.txt'.
