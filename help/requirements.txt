@@ -1,3 +1,0 @@
-paho-mqtt==1.5.1
-Adafruit-Python-DHT==1.4.0
-influxdb==5.3.0
