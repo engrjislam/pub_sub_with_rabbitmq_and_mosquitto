@@ -1,7 +1,5 @@
 import paho.mqtt.client as mqtt
 
-# from send import send_influxdb
-
 from config import BROKER_HOST, BROKER_PORT, BROKER_KEEPALIVE, BROKER_USER, BROKER_PASS
 from config import TOPIC_TEMPERATURE, TOPIC_HUMIDITY
 
@@ -59,7 +57,7 @@ if __name__ == "__main__":
         # built-in callbacks
         client.on_log = on_log
         client.on_connect = on_connect
-        # client.on_subscribe = on_subscribe
+        client.on_subscribe = on_subscribe
         client.on_message = receive_payload
 
         # used-defined callbacks
